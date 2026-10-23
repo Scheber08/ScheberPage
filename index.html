@@ -4,142 +4,886 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Scheber – Projekte</title>
-  <meta name="description" content="Übersicht über die Projekte von Scheber: Pokémon Elf und ScheberMotors." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%234f46e5'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-family='system-ui,sans-serif' font-weight='700'>S</text></svg>" />
+  <meta name="description" content="Der Projekt-Hub von Scheber: Pokémon Elf und ScheberMotors." />
+  <meta name="theme-color" content="#0d1622" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='26' fill='%236ab8df'/><path d='M50 12 L59 41 L88 50 L59 59 L50 88 L41 59 L12 50 L41 41 Z' fill='%23f6c344' stroke='%231f2128' stroke-width='4' stroke-linejoin='round'/></svg>" />
   <style>
+    /* Farben angelehnt an Sheinux: hellblaues Fell, schwarze Mähne, gelbe Sterne */
     :root {
-      --bg: #f6f7fb;
-      --surface: #ffffff;
-      --text: #15171c;
-      --muted: #5d6270;
-      --border: #e3e5ec;
-      --accent: #4f46e5;
-      --shadow: 0 1px 2px rgba(20, 22, 30, .04), 0 8px 24px rgba(20, 22, 30, .06);
+      --bg: #0d1622;
+      --bg-glow: rgba(106, 184, 223, .18);
+      --surface: #142333;
+      --surface-2: #1a2d40;
+      --border: #24394f;
+      --text: #eaf4fb;
+      --muted: #93aec3;
+      --blue: #6ab8df;
+      --blue-strong: #3d8fbf;
+      --yellow: #f6c344;
+      --yellow-strong: #e9a91c;
+      --ink: #1f2128;
+      --on-yellow: #1b1d24;
+      --star-pattern: .05;
+      --shadow: 0 10px 30px rgba(0, 0, 0, .35);
+      color-scheme: dark;
     }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0e1015;
-        --surface: #171a21;
-        --text: #eceef3;
-        --muted: #9aa0ad;
-        --border: #262a33;
-        --accent: #8b85ff;
-        --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
+    :root[data-theme="light"] {
+      --bg: #eef7fc;
+      --bg-glow: rgba(106, 184, 223, .35);
+      --surface: #ffffff;
+      --surface-2: #f4f9fd;
+      --border: #cfe3ef;
+      --text: #142231;
+      --muted: #4f6b80;
+      --blue: #2f86b8;
+      --blue-strong: #1f6d9c;
+      --star-pattern: .12;
+      --shadow: 0 10px 30px rgba(30, 80, 120, .12);
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme="dark"]) {
+        --bg: #eef7fc;
+        --bg-glow: rgba(106, 184, 223, .35);
+        --surface: #ffffff;
+        --surface-2: #f4f9fd;
+        --border: #cfe3ef;
+        --text: #142231;
+        --muted: #4f6b80;
+        --blue: #2f86b8;
+        --blue-strong: #1f6d9c;
+        --star-pattern: .12;
+        --shadow: 0 10px 30px rgba(30, 80, 120, .12);
+        color-scheme: light;
       }
     }
 
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      background: var(--bg);
+      background:
+        radial-gradient(900px 500px at 80% -10%, var(--bg-glow), transparent 70%),
+        radial-gradient(700px 400px at -10% 30%, var(--bg-glow), transparent 70%),
+        var(--bg);
       color: var(--text);
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      line-height: 1.5;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    /* dezentes Sternenmuster wie die Sterne auf Sheinux' Ohren */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      opacity: var(--star-pattern);
+      background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><path d='M30 18 L33 27 L42 30 L33 33 L30 42 L27 33 L18 30 L27 27 Z' fill='%236ab8df'/><path d='M90 72 L92 78 L98 80 L92 82 L90 88 L88 82 L82 80 L88 78 Z' fill='%23f6c344'/></svg>");
+      pointer-events: none;
     }
 
-    main {
-      flex: 1;
+    a { color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    .wrap {
       width: 100%;
-      max-width: 760px;
+      max-width: 1080px;
       margin: 0 auto;
-      padding: 72px 16px 48px;
+      padding: 0 16px;
     }
 
-    header h1 {
-      margin: 0 0 8px;
-      font-size: clamp(2rem, 6vw, 2.75rem);
-      letter-spacing: -0.02em;
+    /* ---------- Header & Tabs ---------- */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+      background: color-mix(in srgb, var(--bg) 80%, transparent);
+      border-bottom: 1px solid var(--border);
     }
-    header p {
-      margin: 0 0 40px;
-      color: var(--muted);
-      font-size: 1.1rem;
-    }
-
-    .projects {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    .header-inner {
+      display: flex;
+      align-items: center;
       gap: 16px;
+      height: 64px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--blue);
+      display: grid;
+      place-items: center;
+    }
+    .brand-mark svg { width: 24px; height: 24px; }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      padding: 4px;
+      margin-left: auto;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-weight: 600;
+      font-size: .95rem;
+      padding: 7px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background .15s ease, color .15s ease;
+    }
+    .tab:hover { color: var(--text); }
+    .tab[aria-selected="true"] {
+      background: var(--yellow);
+      color: var(--on-yellow);
+    }
+    .tab:focus-visible,
+    .btn:focus-visible,
+    .theme-toggle:focus-visible,
+    .card:focus-within {
+      outline: 2px solid var(--yellow);
+      outline-offset: 2px;
+    }
+
+    .theme-toggle {
+      appearance: none;
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+    .theme-toggle svg { width: 18px; height: 18px; }
+
+    @media (max-width: 640px) {
+      .header-inner { flex-wrap: wrap; height: auto; padding: 10px 0; gap: 10px; }
+      .tabs { order: 3; width: 100%; margin-left: 0; }
+      .tab { flex: 1; padding: 7px 10px; font-size: .9rem; }
+      .theme-toggle { margin-left: auto; }
+    }
+
+    /* ---------- Bausteine ---------- */
+    .panel { padding: 56px 0 72px; }
+    .panel[hidden] { display: none; }
+    .panel:not([hidden]) { animation: fade-in .3s ease; }
+    @keyframes fade-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--blue) 15%, transparent);
+      color: var(--blue);
+      font-weight: 700;
+      font-size: .85rem;
+      letter-spacing: .02em;
+    }
+    .accent { color: var(--yellow); }
+    :root[data-theme="light"] .accent { color: var(--blue-strong); }
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme="dark"]) .accent { color: var(--blue-strong); }
+    }
+
+    h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; }
+    .lead { font-size: 1.15rem; color: var(--muted); max-width: 52ch; }
+
+    .btn-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 20px;
+      border-radius: 12px;
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--yellow);
+      color: var(--on-yellow);
+      box-shadow: 0 6px 20px color-mix(in srgb, var(--yellow) 35%, transparent);
+    }
+    .btn-primary:hover { background: var(--yellow-strong); }
+    .btn-ghost {
+      background: var(--surface);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--blue); }
+
+    .section { margin-top: 72px; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 8px;
+      font-size: 1.6rem;
+    }
+    .section-title svg { width: 22px; height: 22px; flex-shrink: 0; }
+    .section-sub { margin: 0 0 24px; color: var(--muted); }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
     }
 
     .card {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding: 24px;
+      position: relative;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 18px;
+      padding: 22px;
       box-shadow: var(--shadow);
-      color: inherit;
-      text-decoration: none;
-      transition: transform .15s ease, border-color .15s ease;
+      transition: transform .2s ease, border-color .2s ease;
     }
-    .card:hover,
-    .card:focus-visible {
-      transform: translateY(-2px);
-      border-color: var(--accent);
-      outline: none;
+    a.card { text-decoration: none; display: block; }
+    a.card:hover, .project-card:hover { transform: translateY(-3px); border-color: var(--blue); }
+    .card h3 { margin: 10px 0 6px; font-size: 1.1rem; }
+    .card p { margin: 0; color: var(--muted); font-size: .95rem; }
+    .card .icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 1.4rem;
+      background: color-mix(in srgb, var(--blue) 16%, transparent);
+    }
+    .card .go {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: var(--muted);
+      transition: color .15s ease, transform .15s ease;
+    }
+    a.card:hover .go { color: var(--yellow); transform: translate(2px, -2px); }
+
+    /* ---------- Start-Tab: Hero ---------- */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      align-items: center;
+      gap: 40px;
+    }
+    .hero h1 { font-size: clamp(2.4rem, 7vw, 4rem); margin: 18px 0 16px; }
+    @media (max-width: 800px) {
+      .hero { grid-template-columns: 1fr; text-align: center; }
+      .hero .lead { margin-left: auto; margin-right: auto; }
+      .hero .btn-row { justify-content: center; }
+      .mascot { order: -1; max-width: 280px; }
     }
 
-    .icon {
-      font-size: 2rem;
-      line-height: 1;
+    .mascot {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      aspect-ratio: 1;
+      margin: 0 auto;
     }
-    .card h2 {
-      margin: 4px 0 0;
-      font-size: 1.25rem;
+    .mascot::before {
+      content: "";
+      position: absolute;
+      inset: 8%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--blue) 45%, transparent), transparent 65%);
+      border: 2px dashed color-mix(in srgb, var(--blue) 45%, transparent);
+      animation: spin 40s linear infinite;
     }
-    .card p {
-      margin: 0;
-      color: var(--muted);
-      flex: 1;
+    .mascot img {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 24px rgba(0, 0, 0, .35));
+      animation: float 4s ease-in-out infinite;
     }
-    .link {
-      color: var(--accent);
+    .spark {
+      position: absolute;
+      width: 34px;
+      color: var(--yellow);
+      animation: blink 2.4s ease-in-out infinite;
+    }
+    .spark:nth-of-type(1) { top: 6%; left: 8%; }
+    .spark:nth-of-type(2) { top: 18%; right: 2%; width: 26px; animation-delay: .8s; }
+    .spark:nth-of-type(3) { bottom: 10%; left: 2%; width: 22px; animation-delay: 1.5s; }
+    @keyframes float { 50% { transform: translateY(-12px); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes blink { 0%, 100% { opacity: .2; transform: scale(.8) rotate(-8deg); } 50% { opacity: 1; transform: scale(1.1) rotate(4deg); } }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-top: 56px;
+    }
+    .stat {
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .stat strong { display: block; font-size: 1.6rem; line-height: 1.2; }
+    .stat span { color: var(--muted); font-size: .9rem; }
+
+    /* Projektkarten auf der Startseite */
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .project-card { padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+    .project-card .shot {
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+    .project-card .shot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top left;
+      transition: transform .4s ease;
+    }
+    .project-card:hover .shot img { transform: scale(1.03); }
+    .project-card .body { padding: 22px; display: flex; flex-direction: column; flex: 1; }
+    .project-card h3 { margin: 0 0 6px; font-size: 1.35rem; }
+    .project-card .body > p { flex: 1; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 0; padding: 0; list-style: none; }
+    .tags li {
+      font-size: .8rem;
       font-weight: 600;
-      font-size: .95rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--muted);
     }
-    .card:hover .link span { margin-left: 4px; }
-    .link span { transition: margin-left .15s ease; }
+    .project-card .btn-row { margin-top: 20px; }
+    .project-card .btn { padding: 9px 16px; font-size: .95rem; }
+
+    /* ---------- Projekt-Tabs ---------- */
+    .project-hero {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .project-hero h2 { font-size: clamp(2.2rem, 6vw, 3.4rem); margin: 16px 0 14px; }
+    .project-hero .domain { margin-top: 14px; color: var(--muted); font-size: .9rem; }
+    @media (max-width: 860px) {
+      .project-hero { grid-template-columns: 1fr; }
+    }
+
+    .browser {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: var(--shadow), 0 0 0 6px color-mix(in srgb, var(--blue) 12%, transparent);
+    }
+    .browser-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+    .browser-bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--border); }
+    .browser-bar i:nth-child(1) { background: #ef7f8f; }
+    .browser-bar i:nth-child(2) { background: var(--yellow); }
+    .browser-bar i:nth-child(3) { background: var(--blue); }
+    .browser-bar span {
+      margin-left: 8px;
+      flex: 1;
+      font-size: .8rem;
+      color: var(--muted);
+      background: var(--surface);
+      border-radius: 6px;
+      padding: 2px 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .browser img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top left; }
+
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .about p { margin: 0 0 12px; color: var(--muted); }
+    .about p strong { color: var(--text); }
+    @media (max-width: 760px) { .about { grid-template-columns: 1fr; } }
+
+    .steps { counter-reset: step; display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .step { counter-increment: step; padding-top: 26px; }
+    .step::before {
+      content: counter(step);
+      position: absolute;
+      top: -18px;
+      left: 20px;
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: var(--on-yellow);
+      background: var(--yellow);
+      border: 3px solid var(--ink);
+      border-radius: 50%;
+      font-size: 1rem;
+    }
+    .steps { margin-top: 34px; }
+
+    .callout {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-top: 72px;
+      padding: 28px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--blue-strong), #2a5f86);
+      color: #fff;
+      box-shadow: var(--shadow);
+      flex-wrap: wrap;
+    }
+    .callout h3 { margin: 0 0 4px; font-size: 1.4rem; }
+    .callout p { margin: 0; opacity: .85; }
+    .callout > div { flex: 1; min-width: 220px; }
+    .callout .btn-row { margin: 0; }
 
     footer {
-      padding: 24px 16px;
-      text-align: center;
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
       color: var(--muted);
-      font-size: .875rem;
+      font-size: .85rem;
     }
+    footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
   </style>
 </head>
 <body>
+  <!-- Wiederverwendbare Symbole -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="star" viewBox="0 0 24 24"><path d="M12 1.5 L14.6 9.4 L22.5 12 L14.6 14.6 L12 22.5 L9.4 14.6 L1.5 12 L9.4 9.4 Z" fill="currentColor" stroke="var(--ink)" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+    <symbol id="bolt" viewBox="0 0 24 24"><path d="M13.5 1 L4 13.5 h6.5 L9 23 L20 9.5 h-6.8 Z" fill="currentColor" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/></symbol>
+    <symbol id="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  </svg>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#start" data-tab="start">
+        <span class="brand-mark"><svg style="color:var(--yellow)"><use href="#star"/></svg></span>
+        Scheber
+      </a>
+      <nav class="tabs" role="tablist" aria-label="Bereiche">
+        <button class="tab" role="tab" id="tab-start" aria-controls="start" aria-selected="true">Start</button>
+        <button class="tab" role="tab" id="tab-pokemon-elf" aria-controls="pokemon-elf" aria-selected="false" tabindex="-1">Pokémon Elf</button>
+        <button class="tab" role="tab" id="tab-schebermotors" aria-controls="schebermotors" aria-selected="false" tabindex="-1">ScheberMotors</button>
+      </nav>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Farbschema wechseln">
+        <svg><use href="#sun"/></svg>
+      </button>
+    </div>
+  </header>
+
   <main>
-    <header>
-      <h1>Scheber</h1>
-      <p>Meine Projekte an einem Ort.</p>
-    </header>
+    <!-- ================= START ================= -->
+    <section class="panel" id="start" role="tabpanel" aria-labelledby="tab-start">
+      <div class="wrap">
+        <div class="hero">
+          <div>
+            <span class="eyebrow"><svg width="14" height="14" style="color:var(--yellow)"><use href="#bolt"/></svg> Projekt-Hub</span>
+            <h1>Hi, ich bin <span class="accent">Scheber</span>.</h1>
+            <p class="lead">Hier sammle ich alles, was ich baue: Browser-Spiele und Tools rund um Pokémon, Fußball und Autos. Such dir ein Projekt aus.</p>
+            <div class="btn-row">
+              <a class="btn btn-primary" href="#projekte">Projekte ansehen ↓</a>
+              <a class="btn btn-ghost" href="https://pkm.scheber.com">Pokémon Elf spielen ↗</a>
+            </div>
+          </div>
+          <div class="mascot">
+            <svg class="spark" viewBox="0 0 24 24" aria-hidden="true"><use href="#bolt"/></svg>
+            <svg class="spark" viewBox="0 0 24 24" aria-hidden="true"><use href="#star"/></svg>
+            <svg class="spark" viewBox="0 0 24 24" aria-hidden="true"><use href="#bolt"/></svg>
+            <img src="assets/sheinux.png" alt="Sheinux, ein kleines blaues Elektro-Pokémon mit gelben Sternen" width="475" height="475" />
+          </div>
+        </div>
 
-    <section class="projects">
-      <a class="card" href="https://pkm.scheber.com">
-        <div class="icon" aria-hidden="true">⚽</div>
-        <h2>Pokémon Elf</h2>
-        <p>Stell aus Pokémon eine Fußball-Startelf auf, lass sie nach Positions-Fit bewerten und spiel eine Saison.</p>
-        <div class="link">pkm.scheber.com <span>→</span></div>
-      </a>
+        <div class="stats">
+          <div class="stat"><strong class="accent">2</strong><span>Projekte online</span></div>
+          <div class="stat"><strong>1.025</strong><span>Pokémon im Kader</span></div>
+          <div class="stat"><strong>34–0</strong><span>die perfekte Saison</span></div>
+          <div class="stat"><strong>4</strong><span>Auto-Vorlagen zum Start</span></div>
+        </div>
 
-      <a class="card" href="https://car.scheber.com">
-        <div class="icon" aria-hidden="true">🏎️</div>
-        <h2>ScheberMotors</h2>
-        <p>Konstruiere dein eigenes Auto bis ins Detail: Karosserie, Antrieb, Fahrwerk – mit realen physikalischen Modellen.</p>
-        <div class="link">car.scheber.com <span>→</span></div>
-      </a>
+        <div class="section" id="projekte">
+          <h2 class="section-title"><svg style="color:var(--yellow)"><use href="#star"/></svg>Projekte</h2>
+          <p class="section-sub">Klick auf „Mehr erfahren“ für die Details oder spring direkt rein.</p>
+          <div class="projects">
+            <article class="card project-card">
+              <div class="shot"><img src="assets/pkm.png" alt="Der Lineup-Builder von Pokémon Elf mit Spielfeld und Teamblatt" loading="lazy" width="1280" height="800" /></div>
+              <div class="body">
+                <h3>⚽ Pokémon Elf</h3>
+                <p>Stell aus Pokémon eine Fußball-Startelf auf, lass sie nach Positions-Fit bewerten und spiel eine ganze Saison.</p>
+                <ul class="tags"><li>Browser-Spiel</li><li>Online-Rangliste</li><li>Multiplayer-Ligen</li></ul>
+                <div class="btn-row">
+                  <button class="btn btn-ghost" type="button" data-tab="pokemon-elf">Mehr erfahren</button>
+                  <a class="btn btn-primary" href="https://pkm.scheber.com">Öffnen ↗</a>
+                </div>
+              </div>
+            </article>
+            <article class="card project-card">
+              <div class="shot"><img src="assets/car.png" alt="Die Startseite von ScheberMotors mit Motor- und Auto-Designer" loading="lazy" width="1280" height="800" /></div>
+              <div class="body">
+                <h3>🏎️ ScheberMotors</h3>
+                <p>Konstruiere eigene Autos und Motoren bis ins Detail, von der Karosserie über den Antrieb bis zum Fahrwerk.</p>
+                <ul class="tags"><li>Konstruktions-Tool</li><li>Physik-Modelle</li><li>Kein Account nötig</li></ul>
+                <div class="btn-row">
+                  <button class="btn btn-ghost" type="button" data-tab="schebermotors">Mehr erfahren</button>
+                  <a class="btn btn-primary" href="https://car.scheber.com">Öffnen ↗</a>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= POKÉMON ELF ================= -->
+    <section class="panel" id="pokemon-elf" role="tabpanel" aria-labelledby="tab-pokemon-elf" hidden>
+      <div class="wrap">
+        <div class="project-hero">
+          <div>
+            <span class="eyebrow">⚽ Pokémon × Fußball</span>
+            <h2>Pokémon <span class="accent">Elf</span></h2>
+            <p class="lead">Stell aus Pokémon eine Fußball-Startelf auf, lass sie nach Positions-Fit bewerten und spiel eine Saison. Schaffst du 34–0?</p>
+            <div class="btn-row">
+              <a class="btn btn-primary" href="https://pkm.scheber.com">Jetzt spielen ↗</a>
+              <a class="btn btn-ghost" href="https://pkm.scheber.com/rangliste">Zur Rangliste</a>
+            </div>
+            <p class="domain">pkm.scheber.com</p>
+          </div>
+          <div class="browser">
+            <div class="browser-bar"><i></i><i></i><i></i><span>pkm.scheber.com</span></div>
+            <img src="assets/pkm.png" alt="Lineup-Builder mit Pokémon auf dem Spielfeld und dem Teamblatt daneben" loading="lazy" width="1280" height="800" />
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title"><svg style="color:var(--yellow)"><use href="#star"/></svg>Worum geht's?</h2>
+          <div class="about">
+            <div>
+              <p>Jedes Pokémon passt unterschiedlich gut auf eine Position: ein schwerer Brocken ins Tor, ein schnelles Elektro-Pokémon auf den Flügel. Dieser <strong>Positions-Fit</strong> wird für jeden Spieler berechnet und ergibt zusammen den Team-Score.</p>
+              <p>Wähle die <strong>Formation</strong> (4-3-3, 4-4-2, 4-2-3-1, 3-5-2 oder 5-3-2), bestimme einen <strong>Kapitän</strong>, dessen Fit doppelt zählt, und gestalte Trikot und Wappen.</p>
+            </div>
+            <div>
+              <p>Im <strong>Builder</strong> stellst du deine Traumelf frei zusammen, aus allen Regionen von Kanto bis Paldea, auf Wunsch mit Legendären, Megas und Regionalformen.</p>
+              <p>In den <strong>Challenges</strong> wird gewürfelt: Region und Typ entscheiden, wen du aufstellen darfst. Danach spielt deine Elf eine Saison mit 34 Spielen und landet in der Online-Rangliste, ganz ohne Anmeldung.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title"><svg style="color:var(--yellow)"><use href="#star"/></svg>Spielmodi</h2>
+          <p class="section-sub">Jeder Modus führt direkt an die richtige Stelle.</p>
+          <div class="grid">
+            <a class="card" href="https://pkm.scheber.com/">
+              <span class="go">↗</span><div class="icon">🧩</div>
+              <h3>Builder</h3>
+              <p>Freie Aufstellung mit Teamblatt, Kapitän, Trikot und bis zu 5 gespeicherten Teams.</p>
+            </a>
+            <a class="card" href="https://pkm.scheber.com/challenge">
+              <span class="go">↗</span><div class="icon">🏆</div>
+              <h3>34–0 Challenge</h3>
+              <p>Alle 1.025 Pokémon. Jede Runde würfelt Region und Typ, höchstens 2 Legendäre.</p>
+            </a>
+            <a class="card" href="https://pkm.scheber.com/taeglich">
+              <span class="go">↗</span><div class="icon">📅</div>
+              <h3>Tägliche Elf</h3>
+              <p>Jeden Tag dieselben Würfe für alle, ein Versuch pro Tag.</p>
+            </a>
+            <a class="card" href="https://pkm.scheber.com/151">
+              <span class="go">↗</span><div class="icon">👾</div>
+              <h3>151 Challenge</h3>
+              <p>Nur die Original-151, mit eigener Gen-1-Wertung und eigener Rangliste.</p>
+            </a>
+            <a class="card" href="https://pkm.scheber.com/draft">
+              <span class="go">↗</span><div class="icon">🎯</div>
+              <h3>Fantasy-Draft</h3>
+              <p>Liga mit Freunden erstellen und live im Snake-Draft wählen, mit Pick-Timer.</p>
+            </a>
+            <a class="card" href="https://pkm.scheber.com/manager">
+              <span class="go">↗</span><div class="icon">📋</div>
+              <h3>Manager-Saison</h3>
+              <p>Kader samt Bank durch 17 Spieltage führen, mit Tagesform und Transfermarkt.</p>
+            </a>
+            <a class="card" href="https://pkm.scheber.com/rangliste">
+              <span class="go">↗</span><div class="icon">📊</div>
+              <h3>Rangliste</h3>
+              <p>Der beste Run pro Spieler zählt, heute, diese Woche oder allzeit.</p>
+            </a>
+            <a class="card" href="https://pkm.scheber.com/trainer">
+              <span class="go">↗</span><div class="icon">🎓</div>
+              <h3>Trainer &amp; Erfolge</h3>
+              <p>50 Erfolge, Münzen verdienen und den eigenen Trainer gestalten.</p>
+            </a>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title"><svg style="color:var(--yellow)"><use href="#star"/></svg>So funktioniert's</h2>
+          <div class="steps">
+            <div class="card step">
+              <h3>Elf aufstellen</h3>
+              <p>Klick auf eine Position und such dir ein Pokémon aus, oder würfle in einer Challenge.</p>
+            </div>
+            <div class="card step">
+              <h3>Fit optimieren</h3>
+              <p>Tausche Spieler per Drag &amp; Drop, bis jede Position passt und der Team-Score stimmt.</p>
+            </div>
+            <div class="card step">
+              <h3>Saison spielen</h3>
+              <p>34 Spiele, eine Bilanz. Teile dein Team als Bild oder Link und jag die Rangliste.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <div>
+            <h3>Bereit für die perfekte Saison?</h3>
+            <p>Kostenlos im Browser, ohne Anmeldung.</p>
+          </div>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://pkm.scheber.com/challenge">34–0 Challenge starten ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SCHEBERMOTORS ================= -->
+    <section class="panel" id="schebermotors" role="tabpanel" aria-labelledby="tab-schebermotors" hidden>
+      <div class="wrap">
+        <div class="project-hero">
+          <div>
+            <span class="eyebrow">🏎️ Autos &amp; Motoren</span>
+            <h2>Scheber<span class="accent">Motors</span></h2>
+            <p class="lead">Konstruiere eigene Autos und Motoren, vom Zylinderkopf bis zum Heckflügel, mit realen physikalischen Modellen.</p>
+            <div class="btn-row">
+              <a class="btn btn-primary" href="https://car.scheber.com">Jetzt bauen ↗</a>
+            </div>
+            <p class="domain">car.scheber.com</p>
+          </div>
+          <div class="browser">
+            <div class="browser-bar"><i></i><i></i><i></i><span>car.scheber.com</span></div>
+            <img src="assets/car.png" alt="Startseite von ScheberMotors mit Motor-Designer, Auto-Designer und Vorlagen" loading="lazy" width="1280" height="800" />
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title"><svg style="color:var(--yellow)"><use href="#star"/></svg>Worum geht's?</h2>
+          <div class="about">
+            <div>
+              <p>ScheberMotors ist ein Konstruktions-Tool für alle, die wissen wollen, wie Autos wirklich funktionieren. Du baust zuerst einen <strong>Motor</strong> und setzt ihn dann in ein <strong>Auto</strong>, das du von Grund auf abstimmst.</p>
+            </div>
+            <div>
+              <p>Jede Änderung wirkt sich sofort auf die Werte aus: Leistungskurve, Beschleunigung, Höchstgeschwindigkeit, Verbrauch und Kosten. Deine Entwürfe landen in der <strong>Garage</strong> und werden lokal im Browser gespeichert, ganz ohne Account.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title"><svg style="color:var(--yellow)"><use href="#star"/></svg>Die Werkzeuge</h2>
+          <div class="grid">
+            <div class="card">
+              <div class="icon">⚙️</div>
+              <h3>Motor-Designer</h3>
+              <p>Block, Kurbeltrieb, Ventiltrieb, Aufladung, Abgas und Abstimmung, mit Leistungskurve in Echtzeit.</p>
+            </div>
+            <div class="card">
+              <div class="icon">🚗</div>
+              <h3>Auto-Designer</h3>
+              <p>Karosserie formen, dazu Fahrwerk, Getriebe, Reifen, Bremsen und Aero abstimmen.</p>
+            </div>
+            <div class="card">
+              <div class="icon">📈</div>
+              <h3>Echte Kennzahlen</h3>
+              <p>0–100 km/h, Höchstgeschwindigkeit, Verbrauch, Kosten und Bewertungen.</p>
+            </div>
+            <div class="card">
+              <div class="icon">🏠</div>
+              <h3>Garage</h3>
+              <p>Alle deine Motoren und Autos an einem Ort, gespeichert direkt im Browser.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title"><svg style="color:var(--yellow)"><use href="#star"/></svg>Vorlagen</h2>
+          <p class="section-sub">Starte mit einer Vorlage und passe alles an.</p>
+          <div class="grid">
+            <div class="card"><div class="icon">🌬️</div><h3>Leichter Roadster</h3><p>Wenig Gewicht, offenes Fahrgefühl.</p></div>
+            <div class="card"><div class="icon">💪</div><h3>Muscle Car</h3><p>Viel Hubraum, viel Drehmoment.</p></div>
+            <div class="card"><div class="icon">🌀</div><h3>Turbo-Kompakter</h3><p>Kleiner Motor, großer Lader.</p></div>
+            <div class="card"><div class="icon">🛣️</div><h3>Diesel-Kombi</h3><p>Sparsam und alltagstauglich.</p></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title"><svg style="color:var(--yellow)"><use href="#star"/></svg>So funktioniert's</h2>
+          <div class="steps">
+            <div class="card step">
+              <h3>Motor konstruieren</h3>
+              <p>Leg Zylinder, Hubraum, Ventiltrieb und Aufladung fest und beobachte die Leistungskurve.</p>
+            </div>
+            <div class="card step">
+              <h3>Auto aufbauen</h3>
+              <p>Wähle Karosserie, Fahrwerk, Getriebe und Reifen, oder starte mit einer Vorlage.</p>
+            </div>
+            <div class="card step">
+              <h3>Werte vergleichen</h3>
+              <p>Prüfe Beschleunigung, Topspeed und Verbrauch und feile weiter, bis alles passt.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <div>
+            <h3>Lust aufs Schrauben?</h3>
+            <p>Direkt im Browser loslegen, ohne Installation.</p>
+          </div>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://car.scheber.com">ScheberMotors öffnen ↗</a>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer>© <span id="year">2026</span> Scheber</footer>
-  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+  <footer>
+    <div class="wrap">
+      <span>© <span id="year">2026</span> Scheber</span>
+      <span>Fan-Projekt. Pokémon und Sheinux sind Marken von Nintendo, Creatures Inc. und GAME FREAK inc.</span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // ---------- Tabs ----------
+    const tabs = [...document.querySelectorAll('[role="tab"]')];
+    const panels = [...document.querySelectorAll('[role="tabpanel"]')];
+    const ids = panels.map(p => p.id);
+
+    function showTab(id, { focus = false, scroll = true } = {}) {
+      if (!ids.includes(id)) id = "start";
+      tabs.forEach(t => {
+        const active = t.getAttribute("aria-controls") === id;
+        t.setAttribute("aria-selected", active);
+        t.tabIndex = active ? 0 : -1;
+        if (active && focus) t.focus();
+      });
+      panels.forEach(p => { p.hidden = p.id !== id; });
+      if (scroll) window.scrollTo({ top: 0 });
+    }
+
+    function goTo(id) {
+      history.pushState(null, "", id === "start" ? location.pathname : "#" + id);
+      showTab(id);
+    }
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener("click", () => goTo(tab.getAttribute("aria-controls")));
+      tab.addEventListener("keydown", e => {
+        const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+        if (!step) return;
+        const next = tabs[(i + step + tabs.length) % tabs.length];
+        goTo(next.getAttribute("aria-controls"));
+        next.focus();
+      });
+    });
+
+    document.querySelectorAll("[data-tab]").forEach(el => {
+      el.addEventListener("click", e => { e.preventDefault(); goTo(el.dataset.tab); });
+    });
+
+    // "#projekte" ist ein Anker im Start-Tab, kein eigener Tab
+    function fromHash() {
+      const h = location.hash.slice(1);
+      if (ids.includes(h)) showTab(h, { scroll: false });
+      else showTab("start", { scroll: false });
+    }
+    window.addEventListener("popstate", fromHash);
+    fromHash();
+
+    // ---------- Farbschema ----------
+    const root = document.documentElement;
+    const toggle = document.getElementById("theme-toggle");
+    const media = matchMedia("(prefers-color-scheme: light)");
+
+    function currentTheme() {
+      return root.dataset.theme || (media.matches ? "light" : "dark");
+    }
+    function renderToggle() {
+      const light = currentTheme() === "light";
+      toggle.querySelector("use").setAttribute("href", light ? "#moon" : "#sun");
+      toggle.setAttribute("aria-label", light ? "Dunkles Farbschema" : "Helles Farbschema");
+      document.querySelector('meta[name="theme-color"]').content = light ? "#eef7fc" : "#0d1622";
+    }
+    try {
+      const saved = localStorage.getItem("theme");
+      if (saved === "light" || saved === "dark") root.dataset.theme = saved;
+    } catch (e) {}
+    toggle.addEventListener("click", () => {
+      const next = currentTheme() === "light" ? "dark" : "light";
+      root.dataset.theme = next;
+      try { localStorage.setItem("theme", next); } catch (e) {}
+      renderToggle();
+    });
+    media.addEventListener("change", renderToggle);
+    renderToggle();
+  </script>
 </body>
 </html>
